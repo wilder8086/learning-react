@@ -1,20 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Card, CardImg, CardImgOverlay, CardBody, CardTitle, CardText } from 'reactstrap';
 
-class Dishdetail extends Component {
-  constructor(props) {
-    super(props);
-  }
 
-  componentDidMount() {
-    console.log("DishDetail Component componentDidMount is invoked");
-  }
-
-  componentDidUpdate(){
-    console.log("DishDetail Component componentDidUpdate is invoked");
-  }
-
-  renderDish(dish) {
+  function RenderDish({ dish }) {
+    console.log("Dish :" , dish);
     if (dish != null) {
       return (
         <div className='col-12 col-md-5 m-1'>
@@ -32,20 +21,20 @@ class Dishdetail extends Component {
     }
   }
 
-  formattedDate = (date) => {
+  function formattedDate(date){
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const dateString = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
     return (dateString);
   }
 
-  renderComments(comments) {
+  function RenderComments({comments}) {
     console.log("comments :", comments);
     if (comments != null) {
       const commentsLi = comments.map((c) => {
         return (
           <li key={c.id}>
             <p>{c.comment}</p>
-            <p>--{c.author, this.formattedDate(c.date)}</p>
+            <p>--{c.author, formattedDate(c.date)}</p>
           </li>
         );
       });
@@ -62,16 +51,16 @@ class Dishdetail extends Component {
     }
   }
 
-  render() {
-    console.log("DishDetail Component render is invoked");
+  const Dishdetail = (props) => {
+    console.log("DishDetail Component render is invoked :  ", props);
     return (
       <div className="row">
-        {this.renderDish(this.props.selectedDish)}
-        {this.renderComments(this.props.selectedDish?.comments)}
+        <RenderDish dish={props.selectedDish}/>
+        <RenderComments comments={props.selectedDish?.comments}/>
       </div>
     )
   }
-}
+
 
 
 export default Dishdetail;
