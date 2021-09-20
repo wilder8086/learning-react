@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, CardImg, CardImgOverlay, CardBody, CardTitle, CardText } from 'reactstrap';
 import Dishdetail from './DishdetailComponent';
 
+// Functional Component
 class Menu extends Component {
   constructor(props) {
     super(props);
