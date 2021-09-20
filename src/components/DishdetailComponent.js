@@ -25,7 +25,7 @@ class Dishdetail extends Component {
   }
 
   formattedDate = (date) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const dateString = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
     return (dateString);
   }
