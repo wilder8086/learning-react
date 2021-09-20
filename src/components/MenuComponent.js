@@ -30,9 +30,9 @@ class Menu extends Component {
     console.log("Menu Component render is invoked");
 
     return (
-        <>
+        <div className="row">
           {menu}
-        </>
+        </div>
     );
   }
 }
