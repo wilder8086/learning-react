@@ -73,3 +73,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 npm install bootstrap@4.0.0
 npm install reactstrap@5.0.0
+
+
+React-router
+npm install font-awesome@4.7.0
+npm install bootstrap-social@5.1.1
