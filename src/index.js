@@ -8,6 +8,9 @@ import Clock from './components/Clock';
 import 'font-awesome/css/font-awesome.css';
 import 'bootstrap-social/bootstrap-social.css';
 
+
+import AppRouter from './AppRouter';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

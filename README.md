@@ -75,6 +75,10 @@ npm install bootstrap@4.0.0
 npm install reactstrap@5.0.0
 
 
-React-router
 npm install font-awesome@4.7.0
 npm install bootstrap-social@5.1.1
+
+React-router
+
+npm install react-router-dom@4.2.2
+
