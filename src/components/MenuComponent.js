@@ -3,7 +3,7 @@ import { Card, CardImg, CardImgOverlay, CardBody, CardTitle, CardText } from 're
 import Dishdetail from './DishdetailComponent';
 
 // Functional Component
-function RenderMEnuItem({dish, onClick}) {
+function RenderMEnuItem({ dish, onClick }) {
   return (
     <Card onClick={() => onClick(dish.id)}>
       <CardImg width="100%" src={dish.image} alt={dish.name} />
@@ -24,8 +24,10 @@ const Menu = (props) => {
   });
 
   return (
-    <div className="row">
-      {menu}
+    <div className="container">
+      <div className="row">
+        {menu}
+      </div>
     </div>
   );
 }
