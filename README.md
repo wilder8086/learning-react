@@ -106,3 +106,6 @@ react-router-dom@4.2.2
    Pero antes nos habiamos preguntado ¿como conectamos el componente Main al Redux Store? 
    ESto se hace en donde hacemos el export del componente, "export default Main", basicaente wrappeamos el componente a exportar "Main" dentro de un connect
 
+
+## Instalar react redux form
+npm install --save react-redux-form@1.16
