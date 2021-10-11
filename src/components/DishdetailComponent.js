@@ -1,6 +1,11 @@
-import React from 'react'
-import { Card, CardImg, CardBody, CardTitle, CardText, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import { Card, CardImg, CardBody, CardTitle, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Col, Row  } from 'reactstrap';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+
+const required = (val) => val && val.length
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
 
 function RenderDish({ dish }) {
   console.log("Dish :", dish);
@@ -44,12 +49,87 @@ function RenderComments({ comments }) {
         <ul className='list-unstyled'>
           {commentsLi}
         </ul>
+        <CommentForm/>
       </div>
     );
   } else {
     return (<div className="vacio"></div>);
   }
 }
+
+class CommentForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isModalOpen: false
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  toggleModal(){
+    console.log("ggggg", this.state);
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    });    
+  }
+
+  handleSubmit(values) {
+    console.log("El estado actual es : " + JSON.stringify(values));
+    alert("El estado actual es : " + JSON.stringify(values));
+    //event.preventDefault();
+  }
+
+  render() {
+    return (
+      <div>
+          <Button outline onClick={this.toggleModal}>
+            <span className="fa fa-comments fa-lg"></span> Submit Comment
+          </Button>
+          <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+            <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+            <ModalBody>
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+              <Label className='font-weight-bold' htmlFor='rating'>Rating</Label>
+              <Control.select model=".rating" name="rating" className="form-control">              
+                <option >1</option>
+                <option selected>2</option>                    
+                <option >3</option>
+                <option >4</option>
+                <option >5</option>
+              </Control.select>  
+              <br />
+              <Label className='font-weight-bold' htmlFor='name'>Your Name</Label>
+              <Control.text model=".name" id="name" name="name"
+                placeholder="Name" className="form-control" 
+                validators={{ 
+                  required, minLength: minLength(3), maxLength: maxLength(15) 
+                }}/>
+              <Errors
+                className="text-danger"
+                model=".name"
+                show="touched"
+                messages={{
+                    required:'Required',
+                    minLength: 'Must be greater than 2 characters',
+                    maxLength: 'Must be 15 characters or less'
+                }}/>
+              <br />                                  
+              <Label className='font-weight-bold' htmlFor='rating'>Comment</Label>        
+              <Control.textarea model=".comment" id="comment" name="comment" 
+                  rows="6" className="form-control"/>                
+              <br /> 
+              <Button type="submit" color="primary">Submit</Button>
+            </LocalForm>  
+            </ModalBody>
+          </Modal>                
+      </div>
+    )
+  }
+}
+
 
 const Dishdetail = (props) => {
   console.log("DishDetail Component render is invoked :  ", props);
@@ -67,7 +147,7 @@ const Dishdetail = (props) => {
       </div>      
       <div className="row">
         <RenderDish dish={props.dish} />
-        <RenderComments comments={props.comments} />
+        <RenderComments comments={props.comments}/>
       </div>
     </div>
   )
