@@ -7,7 +7,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Dishdetail from './DishdetailComponent';
-
+import { addComment } from '../redux/ActionCreators';
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -22,6 +22,15 @@ const mapStateToProps = state => {
   }
 };
 
+// Si queremos despachar algo entonces debemos mapear ese algo al distpatch (mapDispatchToProps)
+// Debemos importar el ActionCreator ADD_COMMENT ya que necesitamos ese ActionCreator para obtener un objeto Action
+// para despacharlo al store diciendo "llama al store dispatch".
+// Definimos una funcion mapDispatchToProps que recibe como parametro una funcion dispatch, esa funcion es de nuestro store que cuando se haga el connect "connect(mapStateToProps, mapDispatchToProps)" este mapDispatchToProps recibira el dispatch como parametro este hara que la propiedad "addComment" sea una funcion que tome parametros "dishId, rating, author, comment" y esta despacha con "dispatch" la Action. y como hacemos esto ?, usamos el ActionCreator que me devolverá la Action. 
+// Ahora debemos proporcionar este mapDispatchToProps a connect
+
+const mapDispatchToProps = (dispatch) => ({
+  addComment : (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+})
 
 class Main extends Component {
   constructor(props) {
@@ -46,7 +55,8 @@ class Main extends Component {
     const DishWithId = ({match}) => {
       return(
           <Dishdetail dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
-            comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+            comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} 
+            addComment={this.props.addComment}/>
       );
     };    
 
@@ -71,4 +81,5 @@ class Main extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+// Conectando mapDispatchToProps entonces addComment esta disponible dentro del componente MainComponent
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -32,14 +32,15 @@ function formattedDate(date) {
   return (dateString);
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, dishId }) {
   console.log("comments :", comments);
   if (comments != null) {
     const commentsLi = comments.map((c) => {
+      console.log("uno : ", c);
       return (
         <li key={c.id}>
           <p>{c.comment}</p>
-          <p>--{c.author, formattedDate(c.date)}</p>
+          <p>--{c.author}, {formattedDate(c.date)}</p>
         </li>
       );
     });
@@ -49,7 +50,7 @@ function RenderComments({ comments }) {
         <ul className='list-unstyled'>
           {commentsLi}
         </ul>
-        <CommentForm/>
+        <CommentForm dishId={dishId} addComment={addComment}/>
       </div>
     );
   } else {
@@ -62,7 +63,8 @@ class CommentForm extends Component {
     super(props);
 
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
+      isNavOpen: false
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -77,9 +79,11 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
+    this.toggleModal();
     console.log("El estado actual es : " + JSON.stringify(values));
-    alert("El estado actual es : " + JSON.stringify(values));
+    alert("El estado actual es : " + this.props.dishId + ", " + JSON.stringify(values));
     //event.preventDefault();
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
@@ -102,8 +106,8 @@ class CommentForm extends Component {
               </Control.select>  
               <br />
               <Label className='font-weight-bold' htmlFor='name'>Your Name</Label>
-              <Control.text model=".name" id="name" name="name"
-                placeholder="Name" className="form-control" 
+              <Control.text model=".author" id="author" name="author"
+                placeholder="Your Name" className="form-control" 
                 validators={{ 
                   required, minLength: minLength(3), maxLength: maxLength(15) 
                 }}/>
@@ -147,7 +151,10 @@ const Dishdetail = (props) => {
       </div>      
       <div className="row">
         <RenderDish dish={props.dish} />
-        <RenderComments comments={props.comments}/>
+        <RenderComments comments={props.comments}
+          addComment={props.addComment}
+          dishId={props.dish.id} />
+          />
       </div>
     </div>
   )
