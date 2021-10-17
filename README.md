@@ -106,7 +106,7 @@ react-router-dom@4.2.2
    Pero antes nos habiamos preguntado ¿como conectamos el componente Main al Redux Store? 
    ESto se hace en donde hacemos el export del componente, "export default Main", basicaente wrappeamos el componente a exportar "Main" dentro de un connect
 
-
+## ####################################### REDUX THUNK ########################################################
 ## Instalar react redux form
 npm install --save react-redux-form@1.16
 
@@ -114,4 +114,249 @@ npm install --save react-redux-form@1.16
 npm install --save redux-thunk@2.2.0
 
 npm install --save redux-logger@3.0.6
+
+
+Redux Thunk middleware nos permite escribir ActionsCreators para retornar una funcion en vez de un objeto Action.
+Tambien usaremos un logger para imprimir un log de Actions inicializados en el Redux store.
+
+## configureStore.js
+      import {createStore, combineReducers, applyMiddleware } from 'redux';
+
+      . . .
+
+      import thunk from 'redux-thunk';
+      import logger from 'redux-logger';
+      
+      . . .
+
+            combineReducers({
+                  dishes: Dishes,
+                  comments: Comments,
+                  promotions: Promotions,
+                  leaders: Leaders
+            }),
+            applyMiddleware(thunk, logger)
+            
+      . . .
+
+## ActionTypes.js 
+   export const DISHES_LOADING = 'DISHES_LOADING';
+   export const DISHES_FAILED = 'DISHES_FAILED';
+   export const ADD_DISHES = 'ADD_DISHES';
+
+## ActionCreators.js
+
+   . . .
+
+   import { DISHES } from '../shared/dishes';
+
+   . . .
+
+
+   export const fetchDishes = () => (dispatch) => {
+
+      dispatch(dishesLoading(true));
+
+      setTimeout(() => {
+         dispatch(addDishes(DISHES));
+      }, 2000);
+   }
+
+   export const dishesLoading = () => ({
+      type: ActionTypes.DISHES_LOADING
+   });
+
+   export const dishesFailed = (errmess) => ({
+      type: ActionTypes.DISHES_FAILED,
+      payload: errmess
+   });
+
+   export const addDishes = (dishes) => ({
+      type: ActionTypes.ADD_DISHES,
+      payload: dishes
+   });
+
+## dishes.js
+
+import * as ActionTypes from './ActionTypes';
+
+export const Dishes = (state = { isLoading: true,
+    errMess: null,
+    dishes:[]}, action) => {
+    switch (action.type) {
+        case ActionTypes.ADD_DISHES:
+            return {...state, isLoading: false, errMess: null, dishes: action.payload};
+
+        case ActionTypes.DISHES_LOADING:
+            return {...state, isLoading: true, errMess: null, dishes: []}
+
+        case ActionTypes.DISHES_FAILED:
+            return {...state, isLoading: false, errMess: action.payload};
+
+        default:
+            return state;
+    }
+};
+
+## Nuevo componente LoadingComponent.js
+   import React from 'react';
+
+   export const Loading = () => {
+      return(
+         <div className="col-12">
+               <span className="fa fa-spinner fa-pulse fa-3x fa-fw text-primary"></span>
+               <p>Loading . . .</p>
+         </div>
+      );
+   };
+
+## MainComponent.js 
+
+   . . .
+
+   import { addComment, fetchDishes } from '../redux/ActionCreators';
+
+   . . .
+
+   fetchDishes: () => { dispatch(fetchDishes())}
+   
+   . . .
+
+   componentDidMount() {
+      this.props.fetchDishes();
+   }
+   
+   . . .
+
+      const HomePage = () => {
+         return(
+            <Home 
+               dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+               dishesLoading={this.props.dishes.isLoading}
+               dishesErrMess={this.props.dishes.errMess}
+               promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
+               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+            />
+         );
+      }
+
+      const DishWithId = ({match}) => {
+         return(
+            <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
+               isLoading={this.props.dishes.isLoading}
+               errMess={this.props.dishes.errMess}
+               comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+               addComment={this.props.addComment}
+            />
+         );
+      };
+      
+   . . .
+
+## DishdetailComponent.js
+. . .
+
+import { Loading } from './LoadingComponent';
+
+. . .
+
+            
+        if (props.isLoading) {
+            return(
+                <div className="container">
+                    <div className="row">            
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if (props.errMess) {
+            return(
+                <div className="container">
+                    <div className="row">            
+                        <h4>{props.errMess}</h4>
+                    </div>
+                </div>
+            );
+        }
+        else if (props.dish != null) 
+        
+. . .
+
+## HomeComponent.js
+   . . .
+
+   import { Loading } from './LoadingComponent';
+
+   . . .
+
+
+   function RenderCard({item, isLoading, errMess}) {
+      
+      if (isLoading) {
+         return(
+                  <Loading />
+         );
+      }
+      else if (errMess) {
+         return(
+                  <h4>{errMess}</h4>
+         );
+      }
+      else 
+         return(
+               <Card>
+                  <CardImg src={item.image} alt={item.name} />
+                  <CardBody>
+                  <CardTitle>{item.name}</CardTitle>
+                  {item.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null }
+                  <CardText>{item.description}</CardText>
+                  </CardBody>
+               </Card>
+         );
+
+   }
+
+   . . .
+
+                     <RenderCard item={props.dish} isLoading={props.dishesLoading} errMess={props.dishesErrMess}  />
+
+   . . .
+
+## MenuComponent.js
+
+. . .
+
+import { Loading } from './LoadingComponent';
+
+. . .
+
+        const menu = props.dishes.dishes.map((dish) => {
+          
+. . .
+
+
+        if (props.dishes.isLoading) {
+            return(
+                <div className="container">
+                    <div className="row">            
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if (props.dishes.errMess) {
+            return(
+                <div className="container">
+                    <div className="row"> 
+                        <div className="col-12">
+                            <h4>{props.dishes.errMess}</h4>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        else
+        
+. . .
 
