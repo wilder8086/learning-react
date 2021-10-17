@@ -109,3 +109,9 @@ react-router-dom@4.2.2
 
 ## Instalar react redux form
 npm install --save react-redux-form@1.16
+
+## Instalar redux thunk and Redux logger
+npm install --save redux-thunk@2.2.0
+
+npm install --save redux-logger@3.0.6
+

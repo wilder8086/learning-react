@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardImg, CardBody, CardTitle, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Col, Row  } from 'reactstrap';
+import { Card, CardImg, CardBody, CardTitle, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom';
+import Loading from './LoadingComponent';
 
 const required = (val) => val && val.length
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -50,7 +51,7 @@ function RenderComments({ comments, addComment, dishId }) {
         <ul className='list-unstyled'>
           {commentsLi}
         </ul>
-        <CommentForm dishId={dishId} addComment={addComment}/>
+        <CommentForm dishId={dishId} addComment={addComment} />
       </div>
     );
   } else {
@@ -71,11 +72,11 @@ class CommentForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  toggleModal(){
+  toggleModal() {
     console.log("ggggg", this.state);
     this.setState({
       isModalOpen: !this.state.isModalOpen
-    });    
+    });
   }
 
   handleSubmit(values) {
@@ -89,46 +90,46 @@ class CommentForm extends Component {
   render() {
     return (
       <div>
-          <Button outline onClick={this.toggleModal}>
-            <span className="fa fa-comments fa-lg"></span> Submit Comment
-          </Button>
-          <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-            <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
-            <ModalBody>
+        <Button outline onClick={this.toggleModal}>
+          <span className="fa fa-comments fa-lg"></span> Submit Comment
+        </Button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+          <ModalBody>
             <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
               <Label className='font-weight-bold' htmlFor='rating'>Rating</Label>
-              <Control.select model=".rating" name="rating" className="form-control">              
+              <Control.select model=".rating" name="rating" className="form-control">
                 <option >1</option>
-                <option selected>2</option>                    
+                <option selected>2</option>
                 <option >3</option>
                 <option >4</option>
                 <option >5</option>
-              </Control.select>  
+              </Control.select>
               <br />
               <Label className='font-weight-bold' htmlFor='name'>Your Name</Label>
               <Control.text model=".author" id="author" name="author"
-                placeholder="Your Name" className="form-control" 
-                validators={{ 
-                  required, minLength: minLength(3), maxLength: maxLength(15) 
-                }}/>
+                placeholder="Your Name" className="form-control"
+                validators={{
+                  required, minLength: minLength(3), maxLength: maxLength(15)
+                }} />
               <Errors
                 className="text-danger"
                 model=".name"
                 show="touched"
                 messages={{
-                    required:'Required',
-                    minLength: 'Must be greater than 2 characters',
-                    maxLength: 'Must be 15 characters or less'
-                }}/>
-              <br />                                  
-              <Label className='font-weight-bold' htmlFor='rating'>Comment</Label>        
-              <Control.textarea model=".comment" id="comment" name="comment" 
-                  rows="6" className="form-control"/>                
-              <br /> 
+                  required: 'Required',
+                  minLength: 'Must be greater than 2 characters',
+                  maxLength: 'Must be 15 characters or less'
+                }} />
+              <br />
+              <Label className='font-weight-bold' htmlFor='rating'>Comment</Label>
+              <Control.textarea model=".comment" id="comment" name="comment"
+                rows="6" className="form-control" />
+              <br />
               <Button type="submit" color="primary">Submit</Button>
-            </LocalForm>  
-            </ModalBody>
-          </Modal>                
+            </LocalForm>
+          </ModalBody>
+        </Modal>
       </div>
     )
   }
@@ -137,27 +138,49 @@ class CommentForm extends Component {
 
 const Dishdetail = (props) => {
   console.log("DishDetail Component render is invoked :  ", props);
-  return (
-    <div className="container">
-      <div className="row">
-        <Breadcrumb>
-          <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
-          <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
-        </Breadcrumb>
-        <div className="col-12">
-          <h3>{props.dish.name}</h3>
-          <hr />
+  if (props.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
         </div>
-      </div>      
-      <div className="row">
-        <RenderDish dish={props.dish} />
-        <RenderComments comments={props.comments}
-          addComment={props.addComment}
-          dishId={props.dish.id} />
-          />
       </div>
-    </div>
-  )
+    );
+  } else {
+    if (props.errMess) {
+      return (
+        <div className="container">
+          <div className="row">
+            <h4>{props.errMess}</h4>
+          </div>
+        </div>
+      );
+    } else {
+      if (props.dish != null) {
+        return (
+          <div className="container">
+            <div className="row">
+              <Breadcrumb>
+                <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+              </Breadcrumb>
+              <div className="col-12">
+                <h3>{props.dish.name}</h3>
+                <hr />
+              </div>
+            </div>
+            <div className="row">
+              <RenderDish dish={props.dish} />
+              <RenderComments comments={props.comments}
+                addComment={props.addComment}
+                dishId={props.dish.id} />
+              />
+            </div>
+          </div>
+        )
+      }  
+    }
+  }    
 }
 
 
