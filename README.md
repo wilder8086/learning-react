@@ -360,3 +360,16 @@ import { Loading } from './LoadingComponent';
         
 . . .
 
+## instalar json-server
+lo instalamos de manera global para tenerlo disponible desde cualquier path
+npm install -g json-server  
+
+json-server nos sera util para configurar un server web local que admita servicios de API REST.
+Tambien puede servir contenido web estatico desde una carpeta public
+
+## Levantar json-server
+Ubicarse en el directorio donde esta ubicado el archivo db.json
+json-server --watch db.json -d 2000 -p 3001
+
+-d 2000 para que tenga 2 seg de delay en responder
+-p 3001 para escuchar en el port 3001, por defualt escucha en el 3000
