@@ -373,3 +373,6 @@ json-server --watch db.json -d 2000 -p 3001
 
 -d 2000 para que tenga 2 seg de delay en responder
 -p 3001 para escuchar en el port 3001, por defualt escucha en el 3000
+
+## ######################################### FETCH ###################################################################
+npm install --save cross-fetch@2.1.0
