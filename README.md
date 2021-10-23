@@ -383,3 +383,9 @@ npm install --save cross-fetch@2.1.0
 ## ################################## Install React Animations #####################################
 npm install --save react-transition-group@2.3.0
 
+
+
+
+## ################################## Install React Animation Components ##############################
+npm install --save react-animation-components@3.0.0
+npm install --save prop-types@15.6.0
