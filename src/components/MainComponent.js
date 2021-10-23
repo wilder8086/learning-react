@@ -7,7 +7,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Dishdetail from './DishdetailComponent';
-import { addComment, fecthDishes, fecthComments, fecthPromos } from '../redux/ActionCreators';
+import { postComment, fecthDishes, fecthComments, fecthPromos } from '../redux/ActionCreators';
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -50,7 +50,7 @@ class Main extends Component {
           errMess={this.props.dishes.errMess}
           comments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10))}
           commentsErrMess={this.props.comments.errMess}
-          addComment={this.props.addComment} />
+          postComment={this.props.postComment} />
       );
     };
 
@@ -90,11 +90,11 @@ const mapStateToProps = state => {
 // Si queremos despachar algo entonces debemos mapear ese algo al distpatch (mapDispatchToProps)
 // Debemos importar el ActionCreator ADD_COMMENT ya que necesitamos ese ActionCreator para obtener un objeto Action
 // para despacharlo al store diciendo "llama al store dispatch".
-// Definimos una funcion mapDispatchToProps que recibe como parametro una funcion dispatch, esa funcion es de nuestro store que cuando se haga el connect "connect(mapStateToProps, mapDispatchToProps)" este mapDispatchToProps recibira el dispatch como parametro este hara que la propiedad "addComment" sea una funcion que tome parametros "dishId, rating, author, comment" y esta despacha con "dispatch" la Action. y como hacemos esto ?, usamos el ActionCreator que me devolverá la Action. 
+// Definimos una funcion mapDispatchToProps que recibe como parametro una funcion dispatch, esa funcion es de nuestro store que cuando se haga el connect "connect(mapStateToProps, mapDispatchToProps)" este mapDispatchToProps recibira el dispatch como parametro este hara que la propiedad "postComment" sea una funcion que tome parametros "dishId, rating, author, comment" y esta despacha con "dispatch" la Action. y como hacemos esto ?, usamos el ActionCreator que me devolverá la Action. 
 // Ahora debemos proporcionar este mapDispatchToProps a connect
 
 const mapDispatchToProps = (dispatch) => ({
-  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
   fecthDishes: () => dispatch(fecthDishes()),
   fecthComments: () => dispatch(fecthComments()),
   fecthPromos: () => dispatch(fecthPromos()),
@@ -102,5 +102,5 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 
-// Conectando mapDispatchToProps entonces addComment esta disponible dentro del componente MainComponent
+// Conectando mapDispatchToProps entonces postComment esta disponible dentro del componente MainComponent
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

@@ -18,8 +18,6 @@ export const Comments = (state = InitialState, action) => {
           
     case ActionTypes.ADD_COMMENT:
       let comment = action.payload;
-      comment.id = state.comments.length;
-      comment.date = new Date().toISOString();
       // como mi state es un array entonces para no mutar el state uso concat 
       return { ...state, comments: state.comments.concat(comment)};
 

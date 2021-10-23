@@ -5,20 +5,46 @@ import { DISHES } from '../shared/dishes';
 import { baseUrl } from '../shared/baseUrl';
 
 // Definimos de una forma standar nuestro ActionCreator que devolvera un Objeto Action que tiene un type y un payload 
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = (comment) => ({
   type: ActionTypes.ADD_COMMENT,
-  payload: {
+  payload: comment
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+  
+  const newComment = {
     dishId: dishId,
     rating: rating,
     author: author,
     comment: comment
-  }
-});
+  };
 
-// ¿ A donde enviamos este tipo de action ?
-// Debemos enviarlo al store.
-// Ahora dentro del store cuando le llegue esta action ¿Que parte del estado deberia ser afectada?
-// La action tiene diversas partes(dishId, rating, author y comment) de un "Comment" que seran enviadas al store y entonces solo deberia cambiar la parte de comments del estado de la app y eso se hará en 
+  newComment.date = new Date().toISOString();
+  console.log("comentario ........ "+ JSON.stringify(newComment));
+  return fetch(baseUrl + 'comments', {
+    method: 'POST',
+    body: JSON.stringify(newComment),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+      error => {
+        throw error;
+      })
+    .then(response => response.json())
+    .then(response => dispatch(addComment(response)))
+    .catch(error => { console.log('post comments', error.message); alert('Your comment could not be posted\nError: ' + error.message); });
+};
 
 
 export const fecthDishes = () => (dispatch) => {
@@ -28,7 +54,7 @@ export const fecthDishes = () => (dispatch) => {
   //  dispatch(addDishes(DISHES));
   //}, 2000);
 
-  return fetch(baseUrl + 'dishees')
+  return fetch(baseUrl + 'dishes')
     .then(response => {
       if (response.ok) {
         return response;

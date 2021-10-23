@@ -34,7 +34,7 @@ function formattedDate(date) {
   return (dateString);
 }
 
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
   console.log("comments :", comments);
   if (comments != null) {
     const commentsLi = comments.map((c) => {
@@ -52,7 +52,7 @@ function RenderComments({ comments, addComment, dishId }) {
         <ul className='list-unstyled'>
           {commentsLi}
         </ul>
-        <CommentForm dishId={dishId} addComment={addComment} />
+        <CommentForm dishId={dishId} postComment={postComment} />
       </div>
     );
   } else {
@@ -85,7 +85,7 @@ class CommentForm extends Component {
     console.log("El estado actual es : " + JSON.stringify(values));
     alert("El estado actual es : " + this.props.dishId + ", " + JSON.stringify(values));
     //event.preventDefault();
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
@@ -173,7 +173,7 @@ const Dishdetail = (props) => {
             <div className="row">
               <RenderDish dish={props.dish} />
               <RenderComments comments={props.comments}
-                addComment={props.addComment}
+                postComment={props.postComment}
                 dishId={props.dish.id} />
               />
             </div>
