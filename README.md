@@ -376,3 +376,10 @@ json-server --watch db.json -d 2000 -p 3001
 
 ## ######################################### FETCH ###################################################################
 npm install --save cross-fetch@2.1.0
+
+
+
+
+## ################################## Install React Animations #####################################
+npm install --save react-transition-group@2.3.0
+
