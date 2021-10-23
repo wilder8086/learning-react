@@ -28,9 +28,23 @@ export const fecthDishes = () => (dispatch) => {
   //  dispatch(addDishes(DISHES));
   //}, 2000);
 
-  return fetch(baseUrl + 'dishes')
+  return fetch(baseUrl + 'dishees')
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+      error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      })
     .then(response => response.json()) // ahora usamos then para manejar la promesa y cuando la promesa se resuelva convertimos la respuesta en json llamando response.json
     .then(dishes => dispatch(addDishes(dishes))) // y cuando se obtenga los dishes haremos un dispatch al action addDishes
+    .catch(error => dispatch(dishesFailed(error.message)));
 
 }
 
@@ -53,8 +67,22 @@ export const addDishes = (dishes) => ({
 export const fecthComments = () => (dispatch) => {
 
   return fetch(baseUrl + 'comments')
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+      error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      })
     .then(response => response.json()) // ahora usamos then para manejar la promesa y cuando la promesa se resuelva convertimos la respuesta en json llamando response.json
     .then(comments => dispatch(addComments(comments))) // y cuando se obtenga los comments haremos un dispatch al action addComments
+    .catch(error => dispatch(commentsFailed(error.message)));
 
 }
 
@@ -74,8 +102,22 @@ export const addComments = (comments) => ({
 export const fecthPromos = () => (dispatch) => {
   dispatch(promosLoading(true));
   return fetch(baseUrl + 'promotions')
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+      error => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      })
     .then(response => response.json()) // ahora usamos then para manejar la promesa y cuando la promesa se resuelva convertimos la respuesta en json llamando response.json
     .then(promos => dispatch(addPromos(promos))) // y cuando se obtenga los promos haremos un dispatch al action addPromos
+    .catch(error => dispatch(promosFailed(error.message)));
 
 }
 
