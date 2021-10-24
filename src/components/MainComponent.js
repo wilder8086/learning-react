@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import Menu from './MenuComponent';
-//import Dishdetail from './DishdetailComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Dishdetail from './DishdetailComponent';
-import { postComment, fecthDishes, fecthComments, fecthPromos } from '../redux/ActionCreators';
+import { postComment, fecthDishes, fecthComments, fecthPromos, fecthLeaders } from '../redux/ActionCreators';
 
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -23,6 +22,7 @@ class Main extends Component {
     this.props.fecthDishes();
     this.props.fecthComments();
     this.props.fecthPromos();
+    this.props.fecthLeaders();
   }
 
   // onDishSelect(dishId) {
@@ -39,7 +39,9 @@ class Main extends Component {
           promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
           promosLoading={this.props.promotions.isLoading}
           promosErrMess={this.props.promotions.errMess}
-          leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+          leader={this.props.leaders.leaders.filter((leader) => leader.featured)[0]}
+          leadersLoading={this.props.leaders.isLoading}
+          leadersErrMess={this.props.leaders.errMess}          
         />
       );
     }
@@ -51,7 +53,7 @@ class Main extends Component {
           errMess={this.props.dishes.errMess}
           comments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10))}
           commentsErrMess={this.props.comments.errMess}
-          postComment={this.props.postComment} />
+          postComment={this.props.postComment}/>
       );
     };
 
@@ -103,6 +105,7 @@ const mapDispatchToProps = (dispatch) => ({
   fecthDishes: () => dispatch(fecthDishes()),
   fecthComments: () => dispatch(fecthComments()),
   fecthPromos: () => dispatch(fecthPromos()),
+  fecthLeaders: () => dispatch(fecthLeaders()),
   resetFeedbackForm: () => { dispatch(actions.reset('feedback'))}
 })
 

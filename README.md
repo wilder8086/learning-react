@@ -389,3 +389,46 @@ npm install --save react-transition-group@2.3.0
 ## ################################## Install React Animation Components ##############################
 npm install --save react-animation-components@3.0.0
 npm install --save prop-types@15.6.0
+
+
+## ########################################### Assignment 4 : Task 1 #####################################
+
+1. Agregar Constantes en ActionTypes.js
+
+export const LEADERS_LOADING = 'LEADERS_LOADING';
+export const LEADERS_FAILED = 'LEADERS_FAILED';
+export const ADD_LEADERS = 'ADD_LEADERS';
+
+2. Agregar fetch y actions en ActionCreators.js
+
+export const fecthLeaders = () => (dispatch) => {
+
+   ...
+   ...
+   ...
+
+3. Agregar en reducer logica para responder a los actions de redux, logica para updatear store, error etc
+
+const InitialState = {
+  isLoading: true,
+  errMess: null,
+  leaders: []
+}
+
+export const Leaders = (state = InitialState, action) => {
+  switch (action.type) {
+    case ActionTypes.LEADERS_LOADING:
+      return {...state, isLoading: true, errMess: null, leaders: []};
+    case ActionTypes.LEADERS_FAILED:
+      return {...state, isLoading: false, errMess: action.payload, leaders:[]};
+    case ActionTypes.ADD_LEADERS:
+      return {...state, isLoading: false, errMess: null, leaders: action.payload};
+    default:
+      return state;
+  }
+}
+
+
+4. 
+
+
