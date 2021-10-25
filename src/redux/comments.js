@@ -9,6 +9,7 @@ const InitialState = {
 }
 
 export const Comments = (state = InitialState, action) => {
+  console.log(" COMMENTSSSSSSSSSSSSSSSSSSSSSSSSS : " + JSON.stringify(action.payload));
   switch (action.type) {
     case ActionTypes.ADD_COMMENTS:
       return {...state, isLoading: false, errMess: null, comments: action.payload};

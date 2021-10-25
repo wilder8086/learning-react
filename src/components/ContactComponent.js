@@ -26,6 +26,18 @@ class Contact extends Component {
         alert("El estado actual es : " + JSON.stringify(values));
         //event.preventDefault();
         this.props.resetFeedbackForm();
+        const newFeedback = {
+            firstname: values.firstname,
+            lastname: values.lastname,
+            telnum: values.telnum,
+            email: values.email,
+            agree: values.agree,
+            contactType: values.contactType,
+            message: values.message
+          };        
+        this.props.postFeedback(newFeedback);
+
+        alert("Nuevo : " + JSON.stringify(this.props));
     }
 
     

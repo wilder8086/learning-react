@@ -1,7 +1,6 @@
 // Desde aca importamos todo lo que se exportó en el archivo ActionTypes.js
 // Para importar usamos ECS6, importar "todo" (*) como ActionTypes lo que se exporta desde ./ActionTypes
 import * as ActionTypes from './ActionTypes';
-import { DISHES } from '../shared/dishes';
 import { baseUrl } from '../shared/baseUrl';
 
 // Definimos de una forma standar nuestro ActionCreator que devolvera un Objeto Action que tiene un type y un payload 
@@ -89,7 +88,6 @@ export const addDishes = (dishes) => ({
 });
 
 
-
 export const fecthComments = () => (dispatch) => {
 
   return fetch(baseUrl + 'comments')
@@ -121,8 +119,6 @@ export const addComments = (comments) => ({
   type: ActionTypes.ADD_COMMENTS,
   payload: comments
 });
-
-
 
 
 export const fecthPromos = () => (dispatch) => {
@@ -196,4 +192,42 @@ export const leadersFailed = (errmess) => ({
 export const addLeaders = (leaders) => ({
   type: ActionTypes.ADD_LEADERS,
   payload: leaders
+});
+
+
+export const postFeedback = (feedback) => (dispatch) => {
+  console.log("FEEDBACK :::::::::: " + JSON.stringify(feedback));
+
+  return fetch(baseUrl + 'feedback', {
+    method: 'POST',
+    body: JSON.stringify(feedback),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  })
+    .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+      error => {
+        throw error;
+      })
+    .then(response => response.json())
+    .then(response => {
+      console.log("Responseeeeeeeeeeeeee : " + JSON.stringify(response));
+      alert(JSON.stringify(response));
+      return dispatch(addFeedback(response))
+    })
+    .catch(error => { console.log('post feedback', error.message); alert('Your feedback could not be posted\nError: ' + error.message); });
+};
+
+export const addFeedback = (feedback) => ({
+  type: ActionTypes.ADD_FEEDBACK,
+  payload: feedback
 });
